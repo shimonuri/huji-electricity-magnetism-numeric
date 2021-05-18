@@ -1,6 +1,7 @@
 import logging
 import pickle
 import copy
+import time
 
 import space
 import boundary_setter
@@ -33,6 +34,10 @@ class RelaxationModel:
             logging.info(f"(i.{iteration_number}) Updating Space")
             self._update_space(self.space.h)
             logging.info(f"Iteration {iteration_number} Finished")
+            iteration_number += 1
+            if iteration_number % 4 == 0:
+                self.space.create_map()
+                time.sleep(30)
 
         logging.info(f"Relaxation Model is Finished")
         logging.info(f"Dumping space into pickle ({pickle_path})")
@@ -47,30 +52,50 @@ class RelaxationModel:
         self._previous_space = copy.deepcopy(self.space)
 
     def _is_finished(self, max_diff):
+        if self._previous_space is None:
+            return False
+
         actual_max_diff = max(
             (
-                self.space.get_point(r, z) / self._previous_space.get_value(r, z)
+                self.space.get_point(r, z) / self._previous_space.get_point(r, z) - 1
                 for r, z in self.space.get_changeable()
             )
         )
         logging.info(f"Current diff is {actual_max_diff}")
         if actual_max_diff <= max_diff:
-            return False
+            return True
 
-        return True
+        return False
 
     def _update_space(self, h):
-        for r, z in self.space.get_changeable():
+        for i, (r, z) in enumerate(self.space.get_changeable()):
             self.space.set_point(
                 r, z, self._get_new_potential(h, r, z), is_changeable=True
             )
 
     def _get_new_potential(self, h, r, z):
-        r_plus = self.space.get_point(r + h, z)
-        r_minus = self.space.get_point(r - h, z)
-        z_plus = self.space.get_point(r, z + h)
-        z_minus = self.space.get_point(r, z - h)
-        r_delta = h / (2 * r)
+        if r + h <= self.space.rmax:
+            r_plus = self.space.get_point(r + h, z)
+        else:
+            r_plus = 0
+        if r - h >= 0:
+            r_minus = self.space.get_point(r - h, z)
+        else:
+            r_minus = 0
+        if z + h <= self.space.zmax:
+            z_plus = self.space.get_point(r, z + h)
+        else:
+            z_plus = 0
+        if z - h >= 0:
+            z_minus = self.space.get_point(r, z - h)
+        else:
+            z_minus = 0
+
+        if r != 0:
+            r_delta = h / (2 * r)
+        else:
+            r_delta = 0
+
         new_potential = r_plus * (1 + r_delta)
         new_potential += r_minus * (1 - r_delta)
         new_potential += z_plus + z_minus
