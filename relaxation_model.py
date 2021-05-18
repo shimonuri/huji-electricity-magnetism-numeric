@@ -2,14 +2,14 @@ import logging
 import pickle
 import copy
 
-import spoofed_space
+import space
 import boundary_setter
 
 
 class RelaxationModel:
     def __init__(self, rmax, zmax, h, max_diff):
         self._previous_space = None
-        self.space = spoofed_space.Space(rmax, zmax, h)
+        self.space = space.Space(rmax, zmax, h)
         self._max_diff = max_diff
 
     def initDatabase(self):
@@ -41,8 +41,8 @@ class RelaxationModel:
     def _is_finished(self, max_diff):
         actual_max_diff = max(
             (
-                self.space.get_value(r, z) / self._previous_space.get_value(r, z)
-                for r, z in self.space.get_changeable_coordinates()
+                self.space.get_point(r, z) / self._previous_space.get_value(r, z)
+                for r, z in self.space.get_changeable()
             )
         )
         if actual_max_diff <= max_diff:
@@ -51,16 +51,16 @@ class RelaxationModel:
         return True
 
     def _update_space(self, h):
-        for r, z in self.space.get_changeable_coordinates():
-            self.space.set_value(
+        for r, z in self.space.get_changeable():
+            self.space.set_point(
                 r, z, self._get_new_potential(h, r, z), is_changeable=True
             )
 
     def _get_new_potential(self, h, r, z):
-        r_plus = self.space.get_value(r + h, z)
-        r_minus = self.space.get_value(r - h, z)
-        z_plus = self.space.get_value(r, z + h)
-        z_minus = self.space.get_value(r, z - h)
+        r_plus = self.space.get_point(r + h, z)
+        r_minus = self.space.get_point(r - h, z)
+        z_plus = self.space.get_point(r, z + h)
+        z_minus = self.space.get_point(r, z - h)
         r_delta = h / (2 * r)
         new_potential = r_plus * (1 + r_delta)
         new_potential += r_minus * (1 - r_delta)
