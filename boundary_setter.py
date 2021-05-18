@@ -35,8 +35,11 @@ def _set_ball_boundary(current_space):
 
 def _set_far_boundary(current_space):
     for r in np.arange(0, current_space.rmax, 0.1):
-        current_space.set_point(r, current_space.zmax, FAR_POTENTIAL, is_changeable=False)
+        current_space.set_point(
+            r, current_space.zmax, FAR_POTENTIAL, is_changeable=False
+        )
 
     for z in np.arange(0, current_space.zmax, 0.1):
-        current_space.set_point(current_space.rmax, z, FAR_POTENTIAL, is_changeable=False)
-    
+        current_space.set_point(
+            current_space.rmax, z, FAR_POTENTIAL, is_changeable=False
+        )

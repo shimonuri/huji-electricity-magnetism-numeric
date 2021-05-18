@@ -17,15 +17,14 @@ class Space(object):
             if not self.space[(r, z)]["is_changeable"]:
                 raise Exception(f"The point {(r,z)} is not changeable!")
 
-        self.space[(r, z)] = {"potential": val,
-                              "is_changeable": is_changeable}
+        self.space[(r, z)] = {"potential": val, "is_changeable": is_changeable}
         if is_changeable:
             self.__changeable.append((r, z))
 
     def get_point(self, r, z):
         if (r, z) not in self.space:
             raise KeyError(f"{(r, z)} is not a in the space")
-        return self.space[(r, z)]['potential']
+        return self.space[(r, z)]["potential"]
 
     def __set_space(self):
         for i in np.arange(0, self.rmax, self.h):
@@ -36,7 +35,10 @@ class Space(object):
         return self.__changeable
 
     def __convert_space_into_matrix(self):
-        matrix = [[0 for i in range(int(self.rmax / self.h))] for i in range(int(self.zmax / self.h))]
+        matrix = [
+            [0 for i in range(int(self.rmax / self.h))]
+            for i in range(int(self.zmax / self.h))
+        ]
         for r, z in self.space:
             r_i = int(r * self.h)
             z_i = int(z * self.h)
@@ -45,7 +47,7 @@ class Space(object):
 
     def create_map(self):
         matrix = self.__convert_space_into_matrix()
-        plt.imshow(matrix, cmap='hot', interpolation='nearest')
+        plt.imshow(matrix, cmap="hot", interpolation="nearest")
         plt.show()
 
 
