@@ -53,6 +53,12 @@ class Space(object):
     def create_map(self):
         matrix = self.__convert_space_into_matrix()
         plt.imshow(matrix, cmap="hot", interpolation="nearest")
+
+        plt.xlabel("r")
+        plt.ylabel("z")
+        ax = plt.gca()
+        ax.set_ylim(0, self.zmax)
+        ax.set_xlim(0, self.rmax)
         plt.show()
 
 
@@ -60,5 +66,7 @@ class Space(object):
 # if __name__ == '__main__':
 #     s = Space(rmax=8, zmax=14, h=0.1)
 #     s.set_point(2, 2, 2, is_changeable=False)
-#     s.set_point(2, 2, 3)
+#     # s.set_point(2, 2, 3)
 #     print(s.get_point(2, 2))
+#     s.create_map()
+
