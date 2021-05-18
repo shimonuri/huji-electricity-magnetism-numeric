@@ -17,6 +17,7 @@ class Space(object):
         # Check if the point is changeable:
         if (r, z) in self.space:
             if not self.space[(r, z)]["is_changeable"]:
+                return
                 raise Exception(f"The point {(r,z)} is not changeable!")
 
         self.space[(r, z)] = {"potential": val, "is_changeable": is_changeable}
@@ -39,26 +40,28 @@ class Space(object):
     def get_changeable(self):
         return self.__changeable
 
-    def __convert_space_into_matrix(self):
+    def _convert_space_into_matrix(self):
         matrix = [
-            [0 for i in range(int(self.rmax / self.h))]
-            for i in range(int(self.zmax / self.h))
+            [0 for i in np.arange(0, self.rmax + 0.1, 0.1)]
+            for i in np.arange(0, self.zmax + 0.1, 0.1)
         ]
         for r, z in self.space:
-            r_i = int(r * self.h)
-            z_i = int(z * self.h)
-            matrix[r_i][z_i] = self.get_point(r, z)
+            r_i = int(np.round(r / self.h))
+            z_i = int(np.round(z / self.h))
+            matrix[z_i][r_i] = self.get_point(r, z)
+
         return matrix
 
     def create_map(self):
-        matrix = self.__convert_space_into_matrix()
-        plt.imshow(matrix, cmap="hot", interpolation="nearest")
-
+        matrix = self._convert_space_into_matrix()
+        fig, ax = plt.subplots(1, 1)
+        img = plt.imshow(matrix, extent=[0, self.rmax, self.zmax, 0])
+        fig.colorbar(img)
         plt.xlabel("r")
         plt.ylabel("z")
         ax = plt.gca()
-        ax.set_ylim(0, self.zmax)
-        ax.set_xlim(0, self.rmax)
+        ax.set_ylim(ax.get_ylim()[::-1])
+        # ax.set_xlim(ax.get_xlim()[::-1])
         plt.show()
 
 
