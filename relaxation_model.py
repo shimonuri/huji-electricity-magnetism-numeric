@@ -13,11 +13,17 @@ class RelaxationModel:
         self._previous_space = None
         self.space = space.Space(rmax, zmax, h)
         self._max_diff = max_diff
+        self._is_initialized = False
 
     def initDatabase(self):
         boundary_setter.set_boundary(self.space)
+        self._is_initialized = True
 
     def relax(self, pickle_path):
+        if not self._is_initialized:
+            logging.error("Not initialized")
+            return
+
         logging.info("Relaxation Model Begins")
         iteration_number = 0
         while not self._is_finished(self._max_diff):
@@ -47,6 +53,7 @@ class RelaxationModel:
                 for r, z in self.space.get_changeable()
             )
         )
+        logging.info(f"Current diff is {actual_max_diff}")
         if actual_max_diff <= max_diff:
             return False
 
