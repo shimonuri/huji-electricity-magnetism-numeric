@@ -28,7 +28,7 @@ def _set_ball_boundary(current_space):
             current_space.set_point(
                 r=np.round(r, decimals=1),
                 z=np.round(z, decimals=1),
-                value=BALL.potential,
+                val=BALL.potential,
                 is_changeable=False,
             )
 

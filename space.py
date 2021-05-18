@@ -12,6 +12,8 @@ class Space(object):
         self.__set_space()
 
     def set_point(self, r, z, val, is_changeable=True):
+        r = np.round(r, decimals=1)
+        z = np.round(z, decimals=1)
         # Check if the point is changeable:
         if (r, z) in self.space:
             if not self.space[(r, z)]["is_changeable"]:
@@ -20,10 +22,13 @@ class Space(object):
         self.space[(r, z)] = {"potential": val, "is_changeable": is_changeable}
         if is_changeable:
             self.__changeable.append((r, z))
+        elif (r, z) in self.__changeable:
+            self.__changeable.remove((r, z))
 
     def get_point(self, r, z):
         if (r, z) not in self.space:
             raise KeyError(f"{(r, z)} is not a in the space")
+
         return self.space[(r, z)]["potential"]
 
     def __set_space(self):

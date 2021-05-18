@@ -5,6 +5,8 @@ import copy
 import space
 import boundary_setter
 
+logging.basicConfig(level=logging.INFO)
+
 
 class RelaxationModel:
     def __init__(self, rmax, zmax, h, max_diff):
