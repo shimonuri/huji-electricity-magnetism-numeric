@@ -3,7 +3,7 @@ import pickle
 import copy
 
 import spoofed_space
-import boundry_setter
+import boundary_setter
 
 
 class RelaxationModel:
@@ -13,7 +13,7 @@ class RelaxationModel:
         self._max_diff = max_diff
 
     def initDatabase(self):
-        pass
+        boundary_setter.set_boundary(self.space)
 
     def relax(self, pickle_path):
         logging.info("Relaxation Model Begins")
