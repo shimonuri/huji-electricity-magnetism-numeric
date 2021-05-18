@@ -3,11 +3,11 @@ import numpy as np
 
 
 class Space(object):
-    def __init__(self, rmax, zmax, h, space={}):
+    def __init__(self, rmax, zmax, h):
         self.rmax = rmax
         self.zmax = zmax
         self.h = h
-        self.space = space
+        self.space = {}
         self.__changeable = []
         self.__set_space()
 
@@ -16,16 +16,16 @@ class Space(object):
         if (r, z) in self.space:
             if not self.space[(r, z)]["is_changeable"]:
                 raise Exception(f"The point {(r,z)} is not changeable!")
-        else:
-            self.space[(r, z)] = {"potential": val,
-                                  "is_changeable": is_changeable}
-            if is_changeable:
-                self.__changeable.append((r, z))
+
+        self.space[(r, z)] = {"potential": val,
+                              "is_changeable": is_changeable}
+        if is_changeable:
+            self.__changeable.append((r, z))
 
     def get_point(self, r, z):
         if (r, z) not in self.space:
             raise KeyError(f"{(r, z)} is not a in the space")
-        return self.space[(r,z)]['potential']
+        return self.space[(r, z)]['potential']
 
     def __set_space(self):
         for i in np.arange(0, self.rmax, self.h):
@@ -49,10 +49,9 @@ class Space(object):
         plt.show()
 
 
-
-if __name__ == '__main__':
-    s = Space(rmax=8, zmax=14, h=0.1)
-    for i in range(5):
-        for j in range(5):
-            s.set_point(i, j, i+j)
-    s.create_map()
+#
+# if __name__ == '__main__':
+#     s = Space(rmax=8, zmax=14, h=0.1)
+#     s.set_point(2, 2, 2, is_changeable=False)
+#     s.set_point(2, 2, 3)
+#     print(s.get_point(2, 2))
