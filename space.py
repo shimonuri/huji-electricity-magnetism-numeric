@@ -26,6 +26,8 @@ class Space(object):
             self.__changeable.remove((r, z))
 
     def get_point(self, r, z):
+        r = np.round(r, decimals=1)
+        z = np.round(z, decimals=1)
         if (r, z) not in self.space:
             raise KeyError(f"{(r, z)} is not in the space")
 
@@ -34,10 +36,10 @@ class Space(object):
     def __set_space(self):
         for i in np.arange(0, self.rmax, self.h):
             for j in np.arange(0, self.zmax, self.h):
-                self.set_point(i, j, 0)
+                self.set_point(i, j, 8)
 
     def get_changeable(self):
-        return self.__changeable
+        return sorted(self.__changeable)
 
     def _convert_space_into_matrix(self):
         matrix = [
@@ -71,4 +73,3 @@ class Space(object):
 #     # s.set_point(2, 2, 3)
 #     print(s.get_point(2, 2))
 #     s.create_map()
-
