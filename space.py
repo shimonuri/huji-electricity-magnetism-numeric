@@ -17,7 +17,6 @@ class Space(object):
         # Check if the point is changeable:
         if (r, z) in self.space:
             if not self.space[(r, z)]["is_changeable"]:
-                return
                 raise Exception(f"The point {(r,z)} is not changeable!")
 
         self.space[(r, z)] = {"potential": val, "is_changeable": is_changeable}
@@ -28,7 +27,7 @@ class Space(object):
 
     def get_point(self, r, z):
         if (r, z) not in self.space:
-            raise KeyError(f"{(r, z)} is not a in the space")
+            raise KeyError(f"{(r, z)} is not in the space")
 
         return self.space[(r, z)]["potential"]
 
