@@ -35,12 +35,10 @@ class RelaxationModel:
             self._update_space(self.space.h)
             logging.info(f"Iteration {iteration_number} Finished")
             iteration_number += 1
-            if iteration_number % 4 == 0:
-                self.space.create_map()
-                time.sleep(30)
 
         logging.info(f"Relaxation Model is Finished")
         logging.info(f"Dumping space into pickle ({pickle_path})")
+        self.space.create_map()
         self._dump_space(pickle_path)
 
     def _dump_space(self, pickle_path):
