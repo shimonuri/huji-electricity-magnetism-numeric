@@ -56,12 +56,20 @@ class RelaxationModel:
         if self._previous_space is None:
             return False
 
-        actual_max_diff = max(
-            (
-                (self.space.get_point(r, z) / self._previous_space.get_point(r, z) - 1) * 100
-                for r, z in self.space.get_changeable()
-            )
-        )
+        actual_max_diff = 0
+        for r, z in self.space.get_changeable():
+            old_value = self._previous_space.get_point(r, z)
+            new_value = self.space.get_point(r, z)
+            if old_value != 0:
+                diff = ((new_value - old_value) / old_value) * 100
+            else:
+                if new_value != 0:
+                    diff = 100
+                else:
+                    diff = 0
+            if diff > actual_max_diff:
+                actual_max_diff = diff
+
         logging.info(f"Current diff is {actual_max_diff}")
         if actual_max_diff <= max_diff:
             return True
@@ -82,8 +90,6 @@ class RelaxationModel:
 
     def _get_initial_potential(self, r, z):
         distance = np.sqrt((z-4)**2 + r**2)
-        if distance < 1:
-            import pdb;pdb.set_trace()
         return BALL_CHARGE / distance
 
     def _get_new_potential(self, h, r, z):

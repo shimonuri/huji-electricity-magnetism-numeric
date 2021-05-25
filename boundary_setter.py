@@ -24,7 +24,7 @@ def set_boundary(current_space: space.Space):
 def _set_ball_boundary(current_space):
     for r, z in current_space.get_changeable():
         distance_from_ball = np.sqrt((z - 4) ** 2 + r ** 2)
-        if distance_from_ball <= 1:
+        if distance_from_ball <= BALL.radius:
             current_space.set_point(
                 r=np.round(r, decimals=current_space.decimals),
                 z=np.round(z, decimals=current_space.decimals),
