@@ -1,12 +1,14 @@
 import logging
 import pickle
 import copy
-import time
+import numpy as np
 
 import space
 import boundary_setter
 
 logging.basicConfig(level=logging.INFO)
+
+BALL_CHARGE = 20
 
 
 class RelaxationModel:
@@ -18,6 +20,7 @@ class RelaxationModel:
 
     def initDatabase(self):
         boundary_setter.set_boundary(self.space)
+        self._set_initial_values()
         self._is_initialized = True
 
     def relax(self, pickle_path):
@@ -55,7 +58,7 @@ class RelaxationModel:
 
         actual_max_diff = max(
             (
-                self.space.get_point(r, z) / self._previous_space.get_point(r, z) - 1
+                (self.space.get_point(r, z) / self._previous_space.get_point(r, z) - 1) * 100
                 for r, z in self.space.get_changeable()
             )
         )
@@ -70,6 +73,18 @@ class RelaxationModel:
             self.space.set_point(
                 r, z, self._get_new_potential(h, r, z), is_changeable=True
             )
+
+    def _set_initial_values(self):
+        for i, (r, z) in enumerate(self.space.get_changeable()):
+            self.space.set_point(
+                r, z, self._get_initial_potential(r, z), is_changeable=True
+            )
+
+    def _get_initial_potential(self, r, z):
+        distance = np.sqrt((z-4)**2 + r**2)
+        if distance < 1:
+            import pdb;pdb.set_trace()
+        return BALL_CHARGE / distance
 
     def _get_new_potential(self, h, r, z):
         if r + h <= self.space.rmax:

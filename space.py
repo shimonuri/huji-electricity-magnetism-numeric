@@ -7,13 +7,14 @@ class Space(object):
         self.rmax = rmax
         self.zmax = zmax
         self.h = h
+        self.decimals = len(str(h).split('.')[-1])
         self.space = {}
         self.__changeable = []
         self.__set_space()
 
     def set_point(self, r, z, val, is_changeable=True):
-        r = np.round(r, decimals=1)
-        z = np.round(z, decimals=1)
+        r = np.round(r, decimals=self.decimals)
+        z = np.round(z, decimals=self.decimals)
         # Check if the point is changeable:
         if (r, z) in self.space:
             if not self.space[(r, z)]["is_changeable"]:
@@ -26,16 +27,16 @@ class Space(object):
             self.__changeable.remove((r, z))
 
     def get_point(self, r, z):
-        r = np.round(r, decimals=1)
-        z = np.round(z, decimals=1)
+        r = np.round(r, decimals=self.decimals)
+        z = np.round(z, decimals=self.decimals)
         if (r, z) not in self.space:
             raise KeyError(f"{(r, z)} is not in the space")
 
         return self.space[(r, z)]["potential"]
 
     def __set_space(self):
-        for i in np.arange(0, self.rmax, self.h):
-            for j in np.arange(0, self.zmax, self.h):
+        for i in np.arange(0, self.rmax + self.h, self.h):
+            for j in np.arange(0, self.zmax + self.h, self.h):
                 self.set_point(i, j, 8)
 
     def get_changeable(self):
@@ -43,8 +44,8 @@ class Space(object):
 
     def _convert_space_into_matrix(self):
         matrix = [
-            [0 for i in np.arange(0, self.rmax + 0.1, 0.1)]
-            for i in np.arange(0, self.zmax + 0.1, 0.1)
+            [0 for i in np.arange(0, self.rmax + self.h, self.h)]
+            for i in np.arange(0, self.zmax + self.h, self.h)
         ]
         for r, z in self.space:
             r_i = int(np.round(r / self.h))
