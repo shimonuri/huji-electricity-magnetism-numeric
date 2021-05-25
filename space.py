@@ -65,6 +65,17 @@ class Space(object):
         # ax.set_xlim(ax.get_xlim()[::-1])
         plt.show()
 
+    def plot_r(self, r=0):
+        z_vals = np.arange(0, self.zmax + self.h, self.h)
+        potential_vals = [self.get_point(r, z) for z in z_vals]
+        plt.plot(z_vals, potential_vals)
+        plt.xlabel("z")
+        plt.ylabel("Potential")
+        plt.show()
+
+
+
+
 
 #
 # if __name__ == '__main__':
