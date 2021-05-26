@@ -43,6 +43,7 @@ class RelaxationModel:
         logging.info(f"Dumping space into pickle ({pickle_path})")
         self.space.create_map()
         self._dump_space(pickle_path)
+        self.space.plot_r()
 
     def _dump_space(self, pickle_path):
         with open(pickle_path, "wb") as fd:
