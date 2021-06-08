@@ -7,7 +7,7 @@ class Space(object):
         self.rmax = rmax
         self.zmax = zmax
         self.h = h
-        self.decimals = len(str(h).split('.')[-1])
+        self.decimals = len(str(h).split(".")[-1])
         self.space = {}
         self.__changeable = []
         self.__set_space()
@@ -73,9 +73,6 @@ class Space(object):
         plt.xlabel("z")
         plt.ylabel("Potential")
         plt.show()
-
-
-
 
 
 #

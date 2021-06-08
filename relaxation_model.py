@@ -62,7 +62,7 @@ class RelaxationModel:
             old_value = self._previous_space.get_point(r, z)
             new_value = self.space.get_point(r, z)
             if old_value != 0:
-                diff = ((new_value - old_value) / old_value)
+                diff = (new_value - old_value) / old_value
             else:
                 if new_value != 0:
                     diff = 100
@@ -90,8 +90,8 @@ class RelaxationModel:
             )
 
     def _get_initial_potential(self, r, z):
-        distance_ball_1 = np.sqrt((z-4)**2 + r**2)
-        distance_ball_2 = np.sqrt((z+4)**2 + r**2)
+        distance_ball_1 = np.sqrt((z - 4) ** 2 + r ** 2)
+        distance_ball_2 = np.sqrt((z + 4) ** 2 + r ** 2)
         return BALL_CHARGE / distance_ball_1 - BALL_CHARGE / distance_ball_2
 
     def _get_new_potential(self, h, r, z):
