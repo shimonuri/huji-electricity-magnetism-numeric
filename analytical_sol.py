@@ -34,6 +34,9 @@ def get_V(n, z):
 
 def calc_Vtot(n, z):
     voltage = 0
+    if abs(z - a / 2) < R:
+        return V0
+
     for i in range(1, n + 1):
         voltage += get_V(i, z)
     return voltage
@@ -56,6 +59,7 @@ def calc_V_r0():
     domain = np.arange(0, 14 + h, h)
     for z in domain:
         potential_vals.append(calc_Vtot(N, z))
+
     plot_r(domain, potential_vals)
 
 
