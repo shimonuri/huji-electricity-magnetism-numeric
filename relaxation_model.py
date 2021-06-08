@@ -90,8 +90,9 @@ class RelaxationModel:
             )
 
     def _get_initial_potential(self, r, z):
-        distance = np.sqrt((z-4)**2 + r**2)
-        return BALL_CHARGE / distance
+        distance_ball_1 = np.sqrt((z-4)**2 + r**2)
+        distance_ball_2 = np.sqrt((z+4)**2 + r**2)
+        return BALL_CHARGE / distance_ball_1 - BALL_CHARGE / distance_ball_2
 
     def _get_new_potential(self, h, r, z):
         if r + h <= self.space.rmax:
