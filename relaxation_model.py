@@ -62,7 +62,7 @@ class RelaxationModel:
             old_value = self._previous_space.get_point(r, z)
             new_value = self.space.get_point(r, z)
             if old_value != 0:
-                diff = ((new_value - old_value) / old_value) * 100
+                diff = ((new_value - old_value) / old_value)
             else:
                 if new_value != 0:
                     diff = 100
